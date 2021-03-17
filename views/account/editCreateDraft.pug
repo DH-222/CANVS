@@ -1,0 +1,290 @@
+extends ../layout
+
+
+block content
+    - var d=data
+    .page-header
+        h3 Draft a mural for approval
+    if d
+        - var aboutText = (d) ? d.about : ""
+        - var images = d.imageInputs;
+        - var mainThumb = d.mainThumb
+        - var aboutArtistText = (d) ? d.about_artist : ""
+        script(type='text/javascript').
+          var id = "#{JSON.stringify(d.id)}";
+          var sThumb = "#{JSON.stringify(d.mainThumb)}";
+          var mainThumb = JSON.parse(sThumb.replace(/&quot;/g, '"'));
+          var dd = "#{JSON.stringify(d.imageInputs)}";
+          var sThumb = "#{JSON.stringify(d.mainThumb)}";
+          var imgData = (dd.length) ? JSON.parse(dd.replace(/&quot;/g, '"')) : [];
+          var _id = (id) ? JSON.parse(id.replace(/&quot;/g, '"')) : null;
+    form.form-horizontal(id='add-mural-form', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        input.hide(type='text', class='mainThumb', name='mainThumb' value='0' id='mainThumb')
+        // add in jquery to ad and remove input elements
+        .form-group
+            label.col-sm-2(for='name') Mural Title
+            .col-sm-7
+                input.form-control(type='text', value=(d) ? d.name : '', name='name', id='name', placeholder='Mural Title', autofocus)
+        .form-group
+            div.col-sm-2
+            div.hide.template-fine
+            div#uploader-fine-file.col-sm-7
+        .form-group
+            label.col-sm-2(for='about') About title
+            .col-sm-7
+                textarea.form-control(type='text', name='about', id='about', placeholder='About the mural') #{aboutText}
+
+        .form-group
+            label.col-sm-2(for='address') Address
+            .col-sm-7
+                input.form-control(type='text', name='address', value= (d) ? d.address : '', id='address', placeholder='Address', autofocus)
+        .form-group
+            label.col-sm-2(for='city') City
+            .col-sm-7
+                input.form-control(type='text', name='city', value= (d) ? d.city : '', id='city', placeholder='City', autofocus)
+        .form-group
+            label.col-sm-2(for='state') State
+            .col-sm-7
+                input.form-control(type='text', name='state', value= (d) ? d.state : '', id='state', placeholder='State', autofocus)
+        .form-group
+            label.col-sm-2(for='zipcode') Zip Code
+            .col-sm-7
+                input.form-control(type='text', name='zipcode', value= (d) ? d.zipcode : '', id='zipcode', placeholder='Zip code', autofocus)
+
+        .form-group
+            label.col-sm-2(for='latitude') Latitude
+            .col-sm-7
+                input.form-control(type='number', step='any', min="-180", max="180",name='latitude',value= (d) ? d.latitude : '', id='latitude', placeholder='Latitude', autofocus)
+        .form-group
+            label.col-sm-2(for='longitude') Longitude
+            .col-sm-7
+                input.form-control(type='number', step='any', min="-180", max="180", name='longitude', id='longitude',value= (d) ? d.longitude : '', placeholder='Longitude', autofocus)
+
+        .form-group
+            label.col-sm-2(for='creationDate') Date Created
+            .col-sm-7
+                input.form-control(type='text', name='creationDate', value= (d) ? new Date(d.creationDate).toLocaleDateString("en-US"): '', id='datepicker', placeholder='Creation Date', autofocus)
+
+        .form-group
+            label.col-sm-2(for='vimeo') Vimeo
+            .col-sm-7
+                input.form-control(type='text', name='vimeo', id='vimeo', placeholder='Vimeo', value= (d) ? d.vimeo : '', autofocus)
+                small Only put the video id and not full url's. EX: 312021733 instead of https://vimeo.com/312021733
+        .form-group
+            label.col-sm-2(for='youtube') Youtube
+            .col-sm-7
+                input.form-control(type='text', name='youtube', id='youtube', placeholder='Youtube', value= (d) ? d.youtube : '', autofocus)
+                small Only put the video id and not full url's. EX: WRk7rRI06-8 instead of https://youtu.be/WRk7rRI06-8
+        .group-wrappers
+            .form-group
+                .col-sm-2.col-sm-offset-2
+                    h3 Artists
+                .col-sm-5
+                    .add-artist Add an Artist
+            div.artist-wrapper.data-wrappers
+
+                if d && d.artist
+                    each val, index in d.artist
+                        .artist-grp(data-idx=index)
+                            .form-group
+                                .col-sm-2
+                                .col-sm-5
+                                    h4 Artist #{index + 1}
+                            // input(type='hidden', name='artist[#{index}][mid]', id='artistID', value=val.mid)
+                            input.hide(type='text', class='artistId', name='artist['+index+'][_id]' value=(val._id) ? val._id: null id='artistId')
+                            .form-group
+                                label.col-sm-2(for='artist') Artist name
+                                .col-sm-7
+                                    div.scroll-menu-artist
+                                        input.form-control(type='text', name='artist['+index+'][name]', class='artistName', value=val.name, placeholder='Artist', autofocus, required, readonly = (val._id) ? 'readonly' : false)
+                            .form-group
+                                label.col-sm-2(for='about') About artist
+                                .col-sm-7
+                                    textarea.form-control(type='text', name = 'artist['+index+'][about]', class='artistAbout', value=val.about, placeholder='About the artist', autofocus, readonly = (val._id) ? 'readonly' : false) #{val.about}
+                            .form-group
+                                label.col-sm-2(for='facebookLink') Facebook
+                                .col-sm-7
+                                    input.form-control(type='text', name='artist['+index+'][facebookLink]', class='facebookLink', value=val.facebookLink, placeholder='Facebook Link', autofocus, readonly = (val._id) ? 'readonly' : false)
+                                    small Only put the facebook id and not full url's. EX: johnsmith instead of https://www.facebook.com/johnsmith
+                            .form-group
+                                label.col-sm-2(for='instagramLink') Instagram
+                                .col-sm-7
+                                    input.form-control(type='text', name='artist['+index+'][instagramLink]', class='instagramLink', value=val.instagramLink, placeholder='Instagram Link', autofocus, readonly = (val._id) ? 'readonly' : false)
+                                    small Only put the instagram id and not full url's. EX: johnsmith instead of https://www.instagram.com/johnsmith
+                            .form-group
+                                label.col-sm-2(for='twitterLink') Twitter
+                                .col-sm-7
+                                    input.form-control(type='text', name='artist['+index+'][twitterLink]', class='twitterLink', value= val.twitterLink, placeholder='Twitter Link', autofocus, readonly = (val._id) ? 'readonly' : false)
+                                    small Only put the twitter id and not full url's. EX: johnsmith instead of https://www.twitter.com/johnsmith
+                            .form-group
+                                label.col-sm-2(for='youtubeLink') Youtube
+                                .col-sm-7
+                                    input.form-control(type='text', name='artist['+index+'][youtubeLink]', class='youtubeLink', value=val.youtubeLink, placeholder='Youtube Link', autofocus, readonly = (val._id) ? 'readonly' : false)
+                                    small Only put the channel id and not full url's. EX: johnsmith instead of https://www.youtube.com/channel/johnsmith
+                            .form-group
+                                label.col-sm-2(for='weburl') Web Url
+                                .col-sm-7
+                                    input.form-control(type='text', name='artist['+index+'][webUrl]', class='webUrl', placeholder='Web Url', value= val.webUrl , autofocus, readonly = (val._id) ? 'readonly' : false)
+                            .form-group
+                                .col-sm-2
+                                .col-sm-7
+                                    .remove-artist(data-idx=index) Remove this Artist
+
+
+
+            .form-group
+                    .col-sm-2.col-sm-offset-2
+                        h3 Tags
+                    .col-sm-5
+                        .add-tag Add a tag
+            div.tags-wrapper.data-wrappers
+                if d && d.tags
+                    each val, index in d.tags
+                        .tag-grp(data-idx=index)
+                            label.col-sm-2(for='artist') Tag #{index + 1}
+                            .form-group
+                                .col-sm-7
+                                    div.scroll-menu-tag
+                                        input.form-control(type='text', name='tags['+index+'][tag]', value=val.tag, class='tag', placeholder='Tag #{index + 1}', autofocus)
+                            .form-group
+                                .col-sm-2
+                                .col-sm-7
+                                    .remove-tag(data-idx=0) Remove this Tag
+            .form-group
+                .col-sm-2.col-sm-offset-2
+                    h3 Organizations
+                .col-sm-5
+                    .add-organ Add an Organization
+
+            div.organ-wrapper.data-wrappers
+
+                if d && d.organs
+                    each val, index in d.organs
+                        .organ-grp(data-idx=index)
+                            label.col-sm-2(for='artist') Organization #{index + 1}
+                            .form-group
+                                .col-sm-7
+                                    div.scroll-menu-organ
+                                        input.form-control(type='text', name='organs['+index+'][organ]', value=val.organ, class='organ', placeholder='Organization #{index + 1}', autofocus)
+                            .form-group
+                                .col-sm-2
+                                .col-sm-7
+                                    .remove-organ(data-idx=index) Remove this Organization
+            .form-group
+                .col-sm-2.col-sm-offset-2
+                    h3 Links
+                .col-sm-5
+                    .add-link Add a link
+            div.links-wrapper.data-wrappers
+
+                if d && d.links
+                    each val, index in d.links
+                        .link-grp(data-idx=index)
+                            label.col-sm-2(for='artist') Link #{index + 1}
+                            .form-group
+                                .col-sm-7
+                                    div.scroll-menu-link
+                                        input.form-control(type='text', name='links['+index+'][link]', value=val.link, class='link', placeholder='Link #{index + 1}', autofocus)
+                            .form-group
+                                .col-sm-2
+                                .col-sm-7
+                                    .remove-link(data-idx=index) Remove this Link
+
+        .form-group
+            .col-sm-2
+            .col-sm-5.radio-fix
+                h4 Set Draft For:
+                label(for='fresh1') Approval
+                    input.radio(type='radio', name='status', id='status' value='approval', checked=(d) ? d.status === 'approval' : 'false')
+                label(for='fresh2') Deletion
+                    input.radio(type='radio', name='status', id='status' value="deletion", checked=(d) ? d.status === 'deletion' : 'false')
+                label(for='fresh2') Hold
+                    input.radio(type='radio', name='status', id='status' value="hold", checked=(d) ? d.status == 'hold' : 'false')
+
+            .col-sm-5
+                h4 Is This Mural Fresh
+                label(for='fresh1') No
+                    input.radio(type='radio', name='freshMural', id='freshMural' value=0, checked=(d) ? d.freshMural === false: false)
+                label(for='fresh2') Yes
+                    input.radio(type='radio', name='freshMural', id='freshMural' value=1, checked=(d) ? d.freshMural === true: false)
+
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-pencil
+                    | Submit
+    .hidden-artist.hide
+        .form-group
+            .col-sm-7
+                input.hide(type='text', class='artistId', value='' id='artistId')
+        .form-group
+            label.col-sm-2(for='artist') Artist name
+            .col-sm-7
+                div.scroll-menu-artist
+                    input.form-control(type='text', class='artistName', value='', placeholder='Artist', required)
+        .form-group
+            label.col-sm-2(for='artistAbout') About artist
+            .col-sm-7
+                textarea.form-control(type='text', class='artistAbout', value='', placeholder='About the artist')
+        .form-group
+            label.col-sm-2(for='facebooklink') Facebook
+            .col-sm-7
+                input.form-control(type='text', class='facebookLink', value='', placeholder='Facebook Link')
+                small Only put the facebook id and not full url's. EX: johnsmith instead of https://www.facebook.com/johnsmith
+        .form-group
+            label.col-sm-2(for='instagram') Instagram
+            .col-sm-7
+                input.form-control(type='text',  class='instagramLink', value='', placeholder='Instagram Link')
+                small Only put the instagram id and not full url's. EX: johnsmith instead of https://www.instagram.com/johnsmith
+        .form-group
+            label.col-sm-2(for='twitter') Twitter
+            .col-sm-7
+                input.form-control(type='text',  class='twitterLink', value= '', placeholder='Twitter Link')
+                small Only put the twitter id and not full url's. EX: johnsmith instead of https://www.twitter.com/johnsmith
+        .form-group
+            label.col-sm-2(for='youtubelink') Youtube
+            .col-sm-7
+                input.form-control(type='text',  class='youtubeLink', value='', placeholder='Youtube Link')
+                small Only put the channel id and not full url's. EX: johnsmith instead of https://www.youtube.com/channel/johnsmith
+
+        .form-group
+            label.col-sm-2(for='weburl') Web Url
+            .col-sm-7
+                input.form-control(type='text', class='webUrl', value='', placeholder='Web Url')
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-artist(data-idx=0) Remove this Artist
+
+    .hidden-tag.hide
+        .form-group
+            label.col-sm-2(for='artist') Tag 1
+            .col-sm-7
+                div.scroll-menu-tag
+                    input.form-control(type='text', value='', class='tag', placeholder='Add Tag', autofocus, required)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-tag(data-idx=0) Remove this Tag
+    .hidden-organ.hide
+        .form-group
+            label.col-sm-2(for='artist') Organization 1
+            .col-sm-7
+                div.scroll-menu-organ
+                    input.form-control(type='text', value='', class='organ', placeholder='Add Organization', autofocus, required)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-organ(data-idx=0) Remove this Organization
+    .hidden-link.hide
+        .form-group
+            label.col-sm-2(for='link') Link 1
+            .col-sm-7
+                div.scroll-menu-link
+                    input.form-control(type='text', value='', class='link', placeholder='Add Link', autofocus, required)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-link(data-idx=0) Remove this Link

@@ -1,0 +1,60 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 Create a contributor account
+    form.form-horizontal(id='signup-form', method='POST' enctype='multipart/form-data')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label.col-sm-3.control-label(for='email') Email
+            .col-sm-7
+                input.form-control(type='email', name='email', id='email', placeholder='Email', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='firstName') First Name
+            .col-sm-7
+                input.form-control(type='text', name='firstName', id='firstName', placeholder='First Name', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='lastName') Last Name
+            .col-sm-7
+                input.form-control(type='text', name='lastName', id='lastName', placeholder='Last Name', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='userName') User Name
+            .col-sm-7
+                input.form-control(type='text', name='userName', id='userName', placeholder='User Name', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='webUrl') Web Url
+            .col-sm-7
+                input.form-control(type='text', name='webUrl', id='webUrl', placeholder='Web Url', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='bio') Bio
+            .col-sm-7
+                textarea.form-control( type="text", name='bio', id='bio', rows="5", value=" ", placeholder='Bio', autofocus, required) #{ " "}
+        .form-group
+            label.col-sm-3.control-label(for='facebookLink') Facebook Link
+            .col-sm-7
+                input.form-control(type='text', name='facebookLink', id='facebookLink', placeholder='Facebook Link', autofocus)
+        .form-group
+            label.col-sm-3.control-label(for='twitterLink') Twitter Link
+            .col-sm-7
+                input.form-control(type='text', name='twitterLink', id='twitterLink', placeholder='Twitter Link', autofocus)
+        .form-group
+            label.col-sm-3.control-label(for='instagramLink') Instagram Link
+            .col-sm-7
+                input.form-control(type='text', name='instagramLink', id='instagramLink', placeholder='Instagram Link', autofocus)
+        .form-group
+            .col-sm-3
+            .col-sm-7
+                input.form-control(type='file', name='picture', class='picture', placeholder='Choose picture')
+        .form-group
+            label.col-sm-3.control-label(for='password') Password
+            .col-sm-7
+                input.form-control(type='password', name='password', id='password', placeholder='Password', required)
+        .form-group
+            label.col-sm-3.control-label(for='confirmPassword') Confirm Password
+            .col-sm-7
+                input.form-control(type='password', name='confirmPassword', id='confirmPassword', placeholder='Confirm Password', required)
+        .form-group
+            .col-sm-offset-3.col-sm-7
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-user-plus
+                    | Signup

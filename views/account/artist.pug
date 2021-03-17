@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 Add an artist
+    form.form-horizontal(id='add-mural-form', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label.col-sm-3.control-label(for='name') Artist Name
+            .col-sm-7
+                input.form-control(type='name', name='name', id='name', placeholder='Artist Name', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='about') About Artist
+            .col-sm-7
+                input.form-control(type='about', name='about', id='about', placeholder='About the Artist', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='facebook_link') Facebook Link
+            .col-sm-7
+                input.form-control(type='facebook_link', name='facebook_link', id='facebook_link', placeholder='Facebook Link', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='instagram_link') Instagram Link
+            .col-sm-7
+                input.form-control(type='instagram_link', name='instagram_link', id='instagram_link', placeholder='Instagram Link', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='web_url') Web Url
+            .col-sm-7
+                input.form-control(type='web_url', name='web_url', id='web_url', placeholder='Web Url', autofocus, required)
+        .form-group
+            label.col-sm-3.control-label(for='avatar') Avatar
+            .col-sm-7
+                input.form-control(type='avatar', name='avatar', id='avatar', placeholder='Avatar', autofocus, required)
+        .form-group
+            .col-sm-offset-3.col-sm-7
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-pencil
+                    | Add Artist

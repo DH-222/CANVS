@@ -1,0 +1,64 @@
+#trigger-upload{
+  display:none;
+}
+.qq-upload-button{
+  border: none;
+  box-shadow: none;
+  border-radius: 6px;
+  width: fit-content;
+}
+.qq-upload-list{
+  box-shadow:none;
+  li.qq-upload-success{
+    width: fit-content;
+    padding: 10px;
+    text-align: center;
+    border:none;
+    background-color:white;
+    float: left;
+    min-height: 120px;
+  }
+  .qq-upload-success{
+
+  }
+}
+
+.custom-delete{
+  background: black;
+  cursor: pointer;
+  color: white;
+  padding: 5px 11px;
+  text-align: center;
+  width: fit-content;
+  border-radius: 40px;
+  font-size: 12px;
+  margin: 10px auto;
+}
+.qq-thumbnail-selector {
+  margin: 0 auto;
+}
+.qq-upload-file{
+  display:none;
+}
+.qq-upload-size{
+  display:none;
+}
+.qq-upload-list-selector {
+  li{
+    position: relative;
+    .fa-thumbs-up {
+      position:absolute;
+      right:0;
+      top:0;
+      border-radius:50px;
+      background-color:white;
+      width:25px;
+      height:25px;
+      display: block;
+      text-align: center;
+      padding-top: 4px;
+      box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.42);
+    }
+  }
+
+}

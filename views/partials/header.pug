@@ -1,0 +1,78 @@
+
+.navbar.navbar-default.navbar-fixed-top
+    .container
+        .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a.navbar-brand(href='/')
+                img(src="/imgs/canvslogo.png" width="100")
+        .collapse.navbar-collapse
+            ul.nav.navbar-nav
+                //li(class=(title === 'Home') ? 'active' : undefined)
+                //    a(href='/') Home
+                //li(class=(title === 'API Examples') ? 'active' : undefined)
+                //    a(href='/api') API Examples
+                //a(href='/contact') Contact
+                //li
+                //    a(href='/status') Status
+                //li(class=('artist-display contribute'))
+                    if user
+                        span=user.artist.length + ' Artist'
+                //li(class=('mural-display contribute'))
+                //    if user
+                //        span=user.murals.length + ' Murals'
+                if user
+                    //li(class=(title === 'Add an artist') ? 'active' : undefined)
+                    //    a(href='/account/artist/add') Add an artist
+                    li.dropdown(class=(title === 'Account Management') ? 'active' : undefined)
+                        a.dropdown-toggle(href='#', data-toggle='dropdown') My Drafts
+                        ul.dropdown-menu
+                            if user.drafts
+                                li
+                                    each dr in user.drafts
+                                        a(href="/account/draft/edit/"+dr.mid) #{dr.name}
+                        li(class=(title === 'View Murals') ? 'active' : undefined)
+                            a(href='/account/murals/view/all/desc') View Murals
+
+
+            ul.nav.navbar-nav.navbar-right
+                if user && (user.role === 'admin' || user.role === 'contrib')
+
+                    li(class=(title === 'Draft a mural') ? 'active' : undefined)
+                        a.create-mural-but(href='/account/draft/add') ADD NEW MURAL
+                if !user
+                    li(class=(title === 'Login') ? 'active' : undefined)
+                        a(href='/login') Login
+                    li(class=(title === 'Create Account') ? 'active' : undefined)
+                        a(href='/signup') Create Account
+                else
+                    li.dropdown(class=(title === 'Account Management') ? 'active' : undefined)
+                        a.dropdown-toggle(href='#', data-toggle='dropdown')
+                            if user.picture
+                                //img(src='https://dev.canvs.app/resource/live/images/'+user.picture)
+                                img(src=resEnvs+user.picture)
+                            else
+                                img(src=user.gravatar(60))
+                            span= user.userName || user.email || user.id
+                            i.caret
+                        ul.dropdown-menu
+                            li(class=(title === 'View Artist') ? 'active' : undefined)
+                                a(href='/account/artists/view/all/desc') View Artists
+                            li
+                                a(href='/account/artist/add') Add Artist
+                            if user.role === 'admin'
+                                li.admin-dash
+                                    a(href='/account/admin/drafts') Admin Dashboard
+                            li
+                                a(href='/account') My Account
+                            li
+                                a(href='/logout') Logout
+                            li
+                                a(href='/account/password') Change Password
+
+
+
+

@@ -1,0 +1,99 @@
+extends ../layout
+
+block content
+    .page-header
+        h3 Profile Information
+        div.activity
+            if user.murals
+                span.key Murals you added:
+                span.val #{user.murals.length}
+            if user.artist
+                span.key Artist you added:
+                span.val #{user.artist.length}
+            span.key Organizations you added:
+            span.val #{(user.organizations) ? user.organizations.length : 0}
+    form.form-horizontal(action='/account/profile', method='POST' enctype='multipart/form-data')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            label.col-sm-3.control-label(for='twitterLink') Username
+            .col-sm-7
+                input.form-control(type='text', name='userName', id='username', placeholder='username', value=user.userName autofocus)
+
+        .form-group
+            label.col-sm-3.control-label(for='email') Email
+            .col-sm-7
+                input.form-control(type='email', name='email', id='email', value=user.email)
+        .form-group
+            label.col-sm-3.control-label(for='userName') User Name
+            .col-sm-7
+                input.form-control(type='text', name='userName', id='userName', value=user.userName)
+        .form-group
+            label.col-sm-3.control-label(for='firstName') First Name
+            .col-sm-7
+                input.form-control(type='text', name='firstName', id='firstName', value=user.firstName)
+        .form-group
+            label.col-sm-3.control-label(for='lastName') Last Name
+            .col-sm-7
+                input.form-control(type='text', name='lastName', id='lastName', value=user.lastName)
+        .form-group
+            label.col-sm-3.control-label(for='bio') Bio
+            .col-sm-7
+                textarea.form-control(type='text', name='bio', id='bio') #{user.bio}
+        //.form-group
+        //    label.col-sm-3.control-label Gender
+        //    .col-sm-6
+        //        label.radio.col-sm-3
+        //            input(type='radio', checked=user.gender == 'male', name='gender', value='male', data-toggle='radio')
+        //            span Male
+        //        label.radio.col-sm-3
+        //            input(type='radio', checked=user.gender == 'female', name='gender', value='female', data-toggle='radio')
+        //            span Female
+        //        label.radio.col-sm-3
+        //            input(type='radio', checked=user.gender == 'other', name='gender', value='other', data-toggle='radio')
+        //            span Other
+
+        .form-group
+            label.col-sm-3.control-label(for='location') Location
+            .col-sm-7
+                input.form-control(type='text', name='location', id='location', value=user.location)
+        .form-group
+            label.col-sm-3.control-label(for='website') Website
+            .col-sm-7
+                input.form-control(type='text', name='website', id='website', value=user.webUrl)
+        .form-group
+            label.col-sm-3.control-label(for='facebookLink') Facebook Link
+            .col-sm-7
+                input.form-control(type='text', name='facebookLink', id='facebookLink', placeholder='Facebook Link',value=user.facebookLink, autofocus)
+        .form-group
+            label.col-sm-3.control-label(for='twitterLink') Twitter Link
+            .col-sm-7
+                input.form-control(type='text', name='twitterLink', id='twitterLink', placeholder='Twitter Link', value=user.twitterLink autofocus)
+
+        .form-group
+            label.col-sm-3.control-label(for='instagramLink') Instagram Link
+            .col-sm-7
+                input.form-control(type='text', name='instagramLink', id='instagramLink', placeholder='Instagram Link',value=user.instagramLink autofocus)
+        .form-group
+            label.col-sm-3.control-label(for='youtubeLink') Youtube Link
+            .col-sm-7
+                input.form-control(type='text', name='youtubeLink', id='youtubeLink', placeholder='Youtube Link',value=user.youtubeLink autofocus)
+        if user && user.picture
+            .form-group
+                label.col-sm-3.control-label(for='picture') Picture
+                div.col-sm-7
+                    div.set-images
+                        .image-preview()
+                            img(src= resEnvs + user.picture)
+
+        .form-group
+            .col-sm-3
+            .col-sm-7
+                input.form-control(type='file', name='picture', class='picture', placeholder='Choose picture')
+
+        .form-group
+            .col-sm-offset-3.col-sm-4
+                button.btn.btn.btn-primary(type='submit')
+                    i.fa.fa-pencil
+                    | Update Profile
+
+

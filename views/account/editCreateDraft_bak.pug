@@ -1,0 +1,273 @@
+extends ../layout
+
+
+block content
+    - var d=data
+    - var aboutText = (d) ? d.about : ""
+    - var aboutArtistText = (d) ? d.about_artist : ""
+    .page-header
+        h3 Draft a mural for approval
+    if d
+        script(type='text/javascript').
+          var id = "#{JSON.stringify(d.id)}";
+          var dd = "#{JSON.stringify(d.imageInputs)}";
+          var imgData = (dd.length) ? JSON.parse(dd.replace(/&quot;/g, '"')) : [];
+          var _id = (id) ? JSON.parse(id.replace(/&quot;/g, '"')) : null;
+    form.form-horizontal(id='add-mural-form', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        // add in jquery to ad and remove input elements
+        .form-group
+            label.col-sm-2.control-label(for='name') Mural Title*
+            .col-sm-7
+                input.form-control(type='text', value=(d) ? d.name : '', name='name', id='name', placeholder='Mural Title', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='none') Images*
+            div.hide.template-fine
+            div#uploader-fine-file.col-sm-7
+        .form-group
+            label.col-sm-2.control-label(for='about') About the mural
+            .col-sm-7
+                textarea.form-control(type='text', name='about', id='about', placeholder='About the mural') #{aboutText}
+        .form-group
+            label.col-sm-2.control-label(for='pendingApproval') Set Status*
+            .col-sm-7
+                label(for='fresh1') Approve
+                input.radio(type='radio', name='status', id='status' value='approval', checked=(d) ? d.status == 'approval' : 'false', required)
+                label(for='fresh2') Delete
+                input.radio(type='radio', name='status', id='status' value="deletion", checked=(d) ? d.status == 'deletion' : 'false')
+                label(for='fresh2') Hold
+                    input.radio(type='radio', name='status', id='status' value="hold", checked=(d) ? d.status == 'hold' : 'false')
+        .form-group
+            label.col-sm-2.control-label(for='freshMural') New Mural*
+            .col-sm-7
+                label(for='fresh1') No
+                input.radio(type='radio', name='freshMural', id='freshMural' value=0, checked=(d) ? d.freshMural == 0 : 'false', required)
+                label(for='fresh2') Yes
+                input.radio(type='radio', name='freshMural', id='freshMural' value=1, checked=(d) ? d.freshMural == 1 : 'false')
+        .form-group
+            label.col-sm-2.control-label(for='address') Address*
+            .col-sm-7
+                input.form-control(type='text', name='address', value= (d) ? d.address : '', id='address', placeholder='Address', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') City*
+            .col-sm-7
+                input.form-control(type='text', name='city', value= (d) ? d.city : '', id='city', placeholder='City', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') State*
+            .col-sm-7
+                input.form-control(type='text', name='state', value= (d) ? d.state : '', id='state', placeholder='State', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') Zip code*
+            .col-sm-7
+                input.form-control(type='text', name='zipcode', value= (d) ? d.zipcode : '', id='zipcode', placeholder='Zip code', autofocus, required)
+
+        .form-group
+            label.col-sm-2.control-label(for='latitude') Latitude*
+            .col-sm-7
+                input.form-control(type='number', step='any', name='latitude',value= (d) ? d.latitude : '', id='latitude', placeholder='Latitude', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='longitude') Longitude*
+            .col-sm-7
+                input.form-control(type='number', step='any', name='longitude', id='longitude',value= (d) ? d.longitude : '', placeholder='Longitude', autofocus, required)
+        //.form-group
+        //    label.col-sm-2.control-label(for='selected') Creation Date*
+        //    .col-sm-7
+        //        select.select-year(required)
+        //            each opt in dates
+        //                option(value=opt) #{opt}
+        .form-group
+            label.col-sm-2.control-label(for='creationDate') Creation Date*
+            .col-sm-7
+                input.form-control(type='text', name='creationDate', value= (d) ? d.creationDate : '', id='datepicker', placeholder='Creation Date', autofocus, required)
+
+        .form-group
+            label.col-sm-2.control-label(for='vimeo') Vimeo
+            .col-sm-7
+                input.form-control(type='text', name='vimeo', id='vimeo', placeholder='Vimeo', value= (d) ? d.vimeo : '', autofocus)
+        .form-group
+            label.col-sm-2.control-label(for='youtube') Youtube
+            .col-sm-7
+                input.form-control(type='text', name='youtube', id='youtube', placeholder='Youtube', value= (d) ? d.youtube : '', autofocus)
+        // gonna have to chagee to a loop on read in
+        div.artist-wrapper
+            h3 Artists
+            .form-group
+                .col-sm-2
+                .col-sm-7
+                    .add-artist Add an Artist
+            if d && d.artist
+                each val, index in d.artist
+                    .artist-grp(data-idx=index)
+                        .form-group
+                            .col-sm-2
+                            .col-sm-7
+                                h4 Artist #{index + 1}
+                        // input(type='hidden', name='artist[#{index}][mid]', id='artistID', value=val.mid)
+                        .form-group
+                            label.col-sm-2.control-label(for='artist') Artist Name*
+                            .col-sm-7
+                                div.scroll-menu-artist
+                                    input.form-control(type='text', name='artist['+index+'][name]', class='artistName', value=val.name, placeholder='Artist', autofocus, required)
+                        .form-group
+                            label.col-sm-2.control-label(for='about_artist') About the artist
+                            .col-sm-7
+                                textarea.form-control(type='text', name=name = 'artist['+index+'][about]', id='artistAbout', value=val.about, placeholder='About the artist', autofocus) #{val.about}
+                        .form-group
+                            label.col-sm-2.control-label(for='facebookLink') Facebook Link
+                            .col-sm-7
+                                input.form-control(type='text', name='artist['+index+'][facebookLink]', id='facebookLink', value=val.facebookLink, placeholder='Facebook Link', autofocus)
+                        .form-group
+                            label.col-sm-2.control-label(for='instagramLink') Instagram Link
+                            .col-sm-7
+                                input.form-control(type='text', name='artist['+index+'][instagramLink]', id='instagramLink', value=val.instagramLink, placeholder='Instagram Link', autofocus)
+                        .form-group
+                            label.col-sm-2.control-label(for='twitterLink') Twitter Link
+                            .col-sm-7
+                                input.form-control(type='text', name='artist['+index+'][twitterLink]', id='twitterLink', value= val.twitterLink, placeholder='Twitter Link', autofocus)
+                        .form-group
+                            label.col-sm-2.control-label(for='youtubeLink') Youtube Link
+                            .col-sm-7
+                                input.form-control(type='text', name='artist['+index+'][youtubeLink]', id='youtubeLink', value=val.youtubeLink, placeholder='Youtube Link', autofocus)
+                        .form-group
+                            label.col-sm-2.control-label(for='webUrl') Web Url
+                            .col-sm-7
+                                input.form-control(type='text', name='artist['+index+'][webUrl]', id='webUrl', placeholder='Web Url', value= val.webUrl , autofocus)
+                        .form-group
+                            .col-sm-2
+                            .col-sm-7
+                                .remove-artist(data-idx=index) Remove this Artist
+
+
+        div.tags-wrapper
+            h3 Tags
+            .form-group
+                .col-sm-2
+                .col-sm-7
+                    .add-tag Add a tag
+            if d && d.tags
+                each val, index in d.tags
+                    .tag-grp(data-idx=index)
+                        .form-group
+                            label.col-sm-2.control-label(for='tags') Tag #{index + 1}
+                            .col-sm-7
+                                div.scroll-menu-tag
+                                    input.form-control(type='text', name='tags['+index+'][tag]', value=val.tag, class='tag', placeholder='Add Tags', autofocus)
+                        .form-group
+                            .col-sm-2
+                            .col-sm-7
+                                .remove-tag(data-idx=0) Remove this Tag
+
+        div.organ-wrapper
+            h3 Organizations
+            .form-group
+                .col-sm-2
+                .col-sm-7
+                    .add-organ Add an Organization
+            if d && d.organs
+                each val, index in d.organs
+                    .organ-grp(data-idx=index)
+                        .form-group
+                            label.col-sm-2.control-label(for='organizations') Organization #{index + 1}
+                            .col-sm-7
+                                div.scroll-menu-organ
+                                    input.form-control(type='text', name='organs['+index+'][organ]', value=val.organ, class='organ', placeholder='Add Organization', autofocus)
+                        .form-group
+                            .col-sm-2
+                            .col-sm-7
+                                .remove-organ(data-idx=index) Remove this Organization
+
+        div.links-wrapper
+            h3 Links
+            .form-group
+                .col-sm-2
+                .col-sm-7
+                    .add-link Add a link
+            if d && d.links
+                each val, index in d.links
+                    .link-grp(data-idx=index)
+                        .form-group
+                            label.col-sm-2.control-label(for='links') Link #{index + 1}
+                            .col-sm-7
+                                div.scroll-menu-link
+                                    input.form-control(type='text', name='links['+index+'][link]', value=val.link, class='link', placeholder='Add Link', autofocus)
+                        .form-group
+                            .col-sm-2
+                            .col-sm-7
+                                .remove-link(data-idx=index) Remove this Link
+
+        .form-group
+            .col-sm-offset-3.col-sm-7
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-pencil
+                    | Submit
+
+
+    .hidden-artist.hide
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                h4 Artist 1
+        .form-group
+            label.col-sm-2.control-label(for='artist') Artist*
+            .col-sm-7
+                div.scroll-menu-artist
+                    input.form-control(type='text', class='artistName', value='', placeholder='Artist', required)
+        .form-group
+            label.col-sm-2.control-label(for='about_artist') About the artist
+            .col-sm-7
+                textarea.form-control(type='text', id='artistAbout', value='', placeholder='About the artist')
+        .form-group
+            label.col-sm-2.control-label(for='facebookLink') Facebook Link
+            .col-sm-7
+                input.form-control(type='text', id='facebookLink', value='', placeholder='Facebook Link')
+        .form-group
+            label.col-sm-2.control-label(for='instagramLink') Instagram Link
+            .col-sm-7
+                input.form-control(type='text',  id='instagramLink', value='', placeholder='Instagram Link')
+        .form-group
+            label.col-sm-2.control-label(for='twitterLink') Twitter Link
+            .col-sm-7
+                input.form-control(type='text',  id='twitterLink', value= '', placeholder='Twitter Link')
+        .form-group
+            label.col-sm-2.control-label(for='youtubeLink') Youtube Link
+            .col-sm-7
+                input.form-control(type='text',  id='youtubeLink', value='', placeholder='Youtube Link')
+        .form-group
+            label.col-sm-2.control-label(for='webUrl') Web Url
+            .col-sm-7
+                input.form-control(type='text', id='webUrl', value='', placeholder='Web Url')
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-artist(data-idx=0) Remove this Artist
+
+    .hidden-tag.hide
+        .form-group
+            label.col-sm-2.control-label(for='tags') Tags
+            .col-sm-7
+                div.scroll-menu-tag
+                    input.form-control(type='text', value='', class='tag', placeholder='Add Tag', autofocus)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-tag(data-idx=0) Remove this Tag
+    .hidden-organ.hide
+        .form-group
+            label.col-sm-2.control-label(for='organizations') Organizations
+            .col-sm-7
+                div.scroll-menu-organ
+                    input.form-control(type='text', value='', class='organ', placeholder='Add Organization', autofocus)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-organ(data-idx=0) Remove this Organization
+    .hidden-link.hide
+        .form-group
+            label.col-sm-2.control-label(for='links') Link
+            .col-sm-7
+                div.scroll-menu-link
+                    input.form-control(type='text', value='', class='link', placeholder='Add Link', autofocus)
+        .form-group
+            .col-sm-2
+            .col-sm-7
+                .remove-link(data-idx=0) Remove this Link

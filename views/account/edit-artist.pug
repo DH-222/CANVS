@@ -1,0 +1,77 @@
+extends ../layout
+
+
+block content
+    - var d=data
+    // - var resEnv = resourceEnv
+    .page-header
+        h3 Edit existing artist
+    if d
+        script(type='text/javascript').
+          var id = "#{JSON.stringify(d.id)}";
+          var dd = "#{JSON.stringify(d.images)}";
+          var _id = (id) ? JSON.parse(id.replace(/&quot;/g, '"')) : null;
+    form.form-horizontal(id='add-mural-form', method='POST' enctype='multipart/form-data')
+        input(type='hidden', name='_csrf', value=_csrf)
+        .form-group
+            .col-sm-2.col-sm-offset-2
+                h3 Artist
+            div.artist-wrapper.data-wrappers
+                .form-group
+                    label.col-sm-2.control-label(for='artist') Artist name
+                    .col-sm-7
+                        div.scroll-menu-artist
+                            input.form-control(type='text', name='name', class='artistName', value=(d) ? d.name: '', placeholder='Artist')
+                .form-group
+                    label.col-sm-2.control-label(for='about') About artist
+                    .col-sm-7
+                        textarea.form-control(type='text', name = 'about', class='artistAbout', value=(d) ? d.about : '', placeholder='About the artist') #{(d)?d.about:''}
+                .form-group
+                    label.col-sm-2.control-label(for='facebookLink') Facebook
+                    .col-sm-7
+                        input.form-control(type='text', name='facebookLink', value=(d) ? d.facebookLink : '', placeholder='Facebook Link')
+                        small Only put the facebook id and not full url's. EX: johnsmith instead of https://www.facebook.com/johnsmith
+                .form-group
+                    label.col-sm-2.control-label(for='instagramLink') Instagram
+                    .col-sm-7
+                        input.form-control(type='text', name='instagramLink', class='instagramLink', value=(d) ? d.instagramLink : '', placeholder='Instagram Link')
+                        small Only put the instagram id and not full url's. EX: johnsmith instead of https://www.instagram.com/johnsmith
+                .form-group
+                    label.col-sm-2.control-label(for='twitterLink') Twitter
+                    .col-sm-7
+                        input.form-control(type='text', name='twitterLink', class='twitterLink', value= (d) ? d.twitterLink : '', placeholder='Twitter Link')
+                        small Only put the twitter id and not full url's. EX: johnsmith instead of https://www.twitter.com/johnsmith
+                .form-group
+                    label.col-sm-2.control-label(for='youtubeLink') Youtube
+                    .col-sm-7
+                        input.form-control(type='text', name='youtubeLink', class='youtubeLink', value=(d) ? d.youtubeLink : '', placeholder='Youtube Link')
+                        small Only put the channel id and not full url's. EX: johnsmith instead of https://www.youtube.com/channel/johnsmith
+                .form-group
+                    label.col-sm-2.control-label(for='webUrl') Web Url
+                    .col-sm-7
+                        input.form-control(type='text', name='webUrl', class='webUrl', placeholder='Web Url', value= (d) ? d.webUrl : '')
+
+                if d && d.picture
+                    .form-group
+                        div.col-sm-2
+                        div.col-sm-10
+                            div.set-images
+                                .image-preview()
+                                    i(class='fa fa-thumbs-up')
+                                    i.fa.fa-close.remove-image()
+                                    img(src= resEnvs + d.picture)
+
+                .form-group
+                    label.col-sm-2.control-label(for='picture') Picture
+                    .col-sm-7
+                        input.form-control(type='file', name='picture', class='picture', placeholder='Choose picture')
+
+            .form-group
+                .col-sm-2
+                .col-sm-7
+                    button.btn.btn-success(type='submit')
+                        i.fa.fa-pencil
+                        if d
+                            | Update Artist
+                        else
+                            | Create Artist

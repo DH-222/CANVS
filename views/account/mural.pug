@@ -1,0 +1,136 @@
+extends ../layout
+
+
+block content
+    - var d=data
+    - var aboutText = (d) ? d.about : ""
+    - var aboutArtistText = (d) ? d.about_artist : ""
+    .page-header
+        h3 Add a Mural
+    form.form-horizontal(id='add-mural-form', method='POST')
+        input(type='hidden', name='_csrf', value=_csrf)
+        // add in jquery to ad and remove input elements
+        .form-group
+            label.col-sm-2.control-label(for='name') Mural Title*
+            .col-sm-5
+                input.form-control(type='text', value=(d) ? d.name : '', name='name', id='name', placeholder='Mural Title', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='about') About the mural
+            .col-sm-5
+                textarea.form-control(type='text', name='about', id='about', placeholder='About the mural') #{aboutText}
+        .form-group
+            label.col-sm-2.control-label(for='derelict') Archive*
+            .col-sm-5
+                label(for='archive1') No
+                input.radio(type='radio', name='archive', id='archive' value=0, checked=(d) ? d.archive == 0 : 'false' , required)
+                label(for='archive2') Yes
+                input.radio(type='radio', name='archive', id='archive' value=1, checked=(d) ? d.archive == 1 : 'false' )
+        .form-group
+            label.col-sm-2.control-label(for='active') Active*
+            .col-sm-5
+                label(for='active1') No
+                input.radio(type='radio', name='active', id='active' value=0, checked=(d) ? d.active == 0 : 'false', required)
+                label(for='active2') Yes
+                input.radio(type='radio', name='active', id='active' value=1, checked=(d) ? d.active == 1 : 'false')
+        .form-group
+            label.col-sm-2.control-label(for='freshMural') New Mural*
+            .col-sm-5
+                label(for='fresh1') No
+                input.radio(type='radio', name='freshMural', id='freshMural' value=0, checked=(d) ? d.freshMural == 0 : 'false', required)
+                label(for='fresh2') Yes
+                input.radio(type='radio', name='freshMural', id='freshMural' value=1, checked=(d) ? d.freshMural == 1 : 'false')
+        .form-group
+            label.col-sm-2.control-label(for='address') Address*
+            .col-sm-5
+                input.form-control(type='text', name='address', value= (d) ? d.address : '', id='address', placeholder='Address', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') City*
+            .col-sm-5
+                input.form-control(type='text', name='city', value= (d) ? d.city : '', id='city', placeholder='City', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') State*
+            .col-sm-5
+                input.form-control(type='text', name='state', value= (d) ? d.state : '', id='state', placeholder='State', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='address') Zip code*
+            .col-sm-5
+                input.form-control(type='text', name='zipcode', value= (d) ? d.zipcode : '', id='zipcode', placeholder='Zip code', autofocus, required)
+
+        .form-group
+            label.col-sm-2.control-label(for='latitude') Latitude*
+            .col-sm-5
+                input.form-control(type='number', step='any', name='latitude',value= (d) ? d.latitude : '', id='latitude', placeholder='Latitude', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='longitude') Longitude*
+            .col-sm-5
+                input.form-control(type='number', step='any', name='longitude', id='longitude',value= (d) ? d.longitude : '', placeholder='Longitude', autofocus, required)
+        .form-group
+            label.col-sm-2.control-label(for='selected') Creation Date*
+            .col-sm-5
+                select.select-year(required)
+                    each opt in dates
+                        option(value=opt) #{opt}
+        .form-group
+            div.hide.template-fine
+            div#uploader-fine-file
+        .form-group
+            label.col-sm-2.control-label(for='vimeo') Vimeo
+            .col-sm-5
+                input.form-control(type='text', name='vimeo', id='vimeo', placeholder='Vimeo', value= (d) ? d.vimeo : '', autofocus)
+        .form-group
+            label.col-sm-2.control-label(for='youtube') Youtube
+            .col-sm-5
+                input.form-control(type='text', name='youtube', id='youtube', placeholder='Youtube', value= (d) ? d.youtube : '', autofocus)
+
+        div.artist-wrapper
+            h3 Artist
+            .form-group
+                label.col-sm-2.control-label(for='artist') Artist*
+                .col-sm-5
+                    input.form-control(type='text', name='artist', id='artist', value= (d) ? d.artist : '', placeholder='Artist', autofocus, required)
+            .form-group
+                label.col-sm-2.control-label(for='about_artist') About the artist
+                .col-sm-5
+                    textarea.form-control(type='text', name='about_artist', id='about_artist', value= (d) ? d.about_artist : '', placeholder='About the artist', autofocus) #{aboutArtistText}
+            .form-group
+                label.col-sm-2.control-label(for='facebookLink') Facebook Link
+                .col-sm-5
+                    input.form-control(type='text', name='facebookLink', id='facebookLink', value= (d) ? d.facebookLink : '', placeholder='Facebook Link', autofocus)
+            .form-group
+                label.col-sm-2.control-label(for='instagramLink') Instagram Link
+                .col-sm-5
+                    input.form-control(type='text', name='instagramLink', id='instagramLink', value= (d) ? d.instagramLink : '', placeholder='Instagram Link', autofocus)
+            .form-group
+                label.col-sm-2.control-label(for='twitterLink') Twitter Link
+                .col-sm-5
+                    input.form-control(type='text', name='twitterLink', id='twitterLink', value= (d) ? d.twitterLink : '', placeholder='Twitter Link', autofocus)
+            .form-group
+                label.col-sm-2.control-label(for='youtubeLink') Youtube Link
+                .col-sm-5
+                    input.form-control(type='text', name='youtubeLink', id='youtubeLink', value= (d) ? d.youtubeLink : '',placeholder='Youtube Link', autofocus)
+            .form-group
+                label.col-sm-2.control-label(for='webUrl') Web Url
+                .col-sm-5
+                    input.form-control(type='text', name='webUrl', id='webUrl', placeholder='Web Url',value= (d) ? d.webUrl : '', autofocus)
+        div.tags-wrapper
+            h3 Tags, links & organizations
+            .form-group
+                label.col-sm-2.control-label(for='tags') Tags
+                .col-sm-5
+                    input.form-control(type='text', name='tags', id='tags', placeholder='Add Tags',value= (d) ? d.tags : '', autofocus)
+                    p Separate by comma for multiple tags
+        .form-group
+            label.col-sm-2.control-label(for='organizations') Organization
+            .col-sm-5
+                input.form-control(type='text', name='organizations', id='organizations', placeholder='Organization', value= (d) ? d.organizations : '', autofocus)
+                p Separate by comma for multiple organizations
+        .form-group
+            label.col-sm-2.control-label(for='links') Links
+            .col-sm-5
+                input.form-control(type='text', name='links', id='links', placeholder='Links', value= (d) ? d.links : '', autofocus)
+        input(type='text',class="hide", name='isDraft', value=(d) ? 'false' : 'true')
+        .form-group
+            .col-sm-offset-3.col-sm-5
+                button.btn.btn-success(type='submit')
+                    i.fa.fa-pencil
+                    | Submit

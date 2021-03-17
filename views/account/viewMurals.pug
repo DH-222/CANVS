@@ -1,0 +1,57 @@
+extends ../layout
+block content
+
+    div.lazy
+        if data && data.length > 0
+            //- var resEnv = resourceEnv
+            div.sort-row
+                div.col-sm-5
+                    a.btn.btn-primary(href='/account/murals/view/all/desc') Descend Data
+                    a.btn.btn-primary(href='/account/murals/view/all/asc') Ascend Data
+                //div.col-sm-7
+                //    input.go-to(type='number', placeholder="Enter a mural id")
+                //    button.btn.btn-primary.btn-go GO
+            div.all-cards
+                for d, idx in data
+                    - var da = d
+                    - var img = (d.images[0]) ? d.images[0].urlThumb.toLowerCase() : 'thumb/default.jpg'
+                    div.card-wrapper.col-sm-4.col-sm.mural-card(data-id=d._id)
+                        div.card(id=d._id)
+                            div.col-sm-5.no-padding
+                                // img(src='https://canvs.cruxcode.nyc/mural_thumb_'+ img +'.jpg?requestType=image&size=thumb')
+                                img(src= resEnvs+img)
+                                //img(src='https://village-dev.canvs.app/resource/live/images/'+img)
+                            div.card-body.col-sm-7
+                                div.card-call
+                                    span.key Name:
+                                    span.val #{d.name}
+                                div.card-call
+                                    span.key.aug address:
+                                    span.val #{d.address}
+                                div.card-call
+                                    span.key ID:
+                                    span.val #{d.legacyID}
+                                div.card-call
+                                    span.key active:
+                                    span.val #{d.active}
+                                div.card-call
+                                    span.key archive:
+                                    span.val #{d.archive}
+                                div.card-call
+                                    span.key latitude:
+                                    span.val #{d.latitude}
+                                div.card-call
+                                    span.key longitude:
+                                    span.val #{d.longitude}
+                                div.card-call
+                                    span.key longitude:
+                                    span.val #{d.longitude}
+                                div.card-call
+                                    span.key artist:
+                                    span.val #{d.artist ? d.artist.name : ''}
+                                div.card-call
+                                    span.key date:
+                                    span.val #{d.creationDate}
+        else
+            p You do not have any murals under your profile
+
